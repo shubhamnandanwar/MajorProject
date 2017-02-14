@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "969285642881",
+    "firebase_url": "https://codefoster-9022c.firebaseio.com",
+    "project_id": "codefoster-9022c",
+    "storage_bucket": "codefoster-9022c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969285642881:android:1cd6d1df8deb93f7",
+        "android_client_info": {
+          "package_name": "com.clabs.majorproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "969285642881-92e61f18rug4ghktbvcc325mouq2a253.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clabs.codefosterapp",
+            "certificate_hash": "2AB7DA025AAF8264205D7C6237F2C3A10DEB64FA"
+          }
+        },
+        {
+          "client_id": "969285642881-d4i5a1f29216aqb2j0niedleimiv67jm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7s8ZMOBF_pL9FfKT75QYcfqsI8Ld-CzE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "969285642881-d4i5a1f29216aqb2j0niedleimiv67jm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
