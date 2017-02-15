@@ -26,4 +26,22 @@
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentRight">true</item>
     </style>
+
+    <style name="text_style">
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textColorHint">@color/divider</item>
+    </style>
+
+    <style name="medium_text_style" parent="text_style">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="small_text_style" parent="text_style">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="large_text_style" parent="text_style">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

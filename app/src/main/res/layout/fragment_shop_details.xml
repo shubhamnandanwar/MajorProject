@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="@string/text_shop_address"
+        android:background="@drawable/view_design"
+        style="@style/medium_text_style"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/text_landmark"
+        android:background="@drawable/view_design"
+        style="@style/medium_text_style"/>
+
+   <!-- <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="From"/>
+    <TimePicker
+        android:id="@+id/opening_time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Closing"/>
+    <TimePicker
+        android:id="@+id/closing_time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />-->
+    <!-- TODO - Opening time and closing time input -->
+</LinearLayout>
