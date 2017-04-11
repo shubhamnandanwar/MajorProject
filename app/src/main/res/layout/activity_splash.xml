@@ -3,7 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".SplashActivity">
+                tools:context=".activity.SplashActivity">
 
     <ImageView
         android:layout_width="128dp"
@@ -12,8 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/app_logo"
-        android:id="@+id/logo"
-        />
+        android:id="@+id/logo"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_sign_in"

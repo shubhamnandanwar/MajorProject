@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.clabs.majorproject.activity.StorePageActivity"
+    tools:showIn="@layout/activity_store_page">
+    <TextView
+        android:id="@+id/store_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/primary_dark"
+        android:textSize="24sp"
+        style="@style/large_text_style"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Description"
+        style="@style/large_text_style"/>
+
+    <TextView
+        android:id="@+id/store_desc_text_view"
+        style="@style/medium_text_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Address"
+        style="@style/large_text_style"/>
+    <TextView
+        android:id="@+id/store_address_text_view"
+        style="@style/medium_text_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</android.support.v4.widget.NestedScrollView>

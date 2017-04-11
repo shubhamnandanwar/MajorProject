@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.StoreProfileActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:id="@+id/store_image_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/text_store_image"
+                android:scaleType="fitXY"
+                android:src="@drawable/sample"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/rating_text_view"
+                    style="@style/large_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rating - 5*"
+                    android:textColor="@color/primary_dark"
+                    />
+
+                <TextView
+                    android:id="@+id/followers_text_view"
+                    style="@style/large_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="0 Followers"
+                    android:textColor="@color/primary_dark"
+
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/store_desc_text_view"
+                style="@style/medium_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="A totally new concept to me so many variations to Maggi it is amazing. The best Maggi I have ever had was the OMG Maggi so cheesy delicious and fresh. The other Maggi was some fried one forgot the name it was fine crispy and flavourful."
+                />
+
+
+            <TextView
+                style="@style/large_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="Address"/>
+
+            <TextView
+                android:id="@+id/store_address_text_view"
+                style="@style/medium_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="Anand Bazar, Opposite Jain Mithai Bhandar, Old Palasia, Indore"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="#DDDDDD"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    style="@style/medium_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/text_write_a_review"/>
+
+                <EditText
+                    android:id="@+id/review_edit_text"
+                    style="@style/medium_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:hint="Tell us what you think"/>
+
+                <Button
+                    android:id="@+id/submit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@color/transparent"
+                    android:text="@string/text_submit"
+                    android:textAllCaps="true"
+                    android:textColor="@color/primary_dark"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/review_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

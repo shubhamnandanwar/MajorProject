@@ -5,36 +5,33 @@
               android:orientation="vertical">
 
     <EditText
+        android:id="@+id/store_address_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:hint="@string/text_shop_address"
         android:background="@drawable/view_design"
-        style="@style/medium_text_style"/>
-
+        style="@style/medium_text_style"
+        android:inputType="textCapWords"/>
     <EditText
+        android:id="@+id/city_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/text_landmark"
+        android:layout_margin="8dp"
+        android:hint="@string/text_city"
         android:background="@drawable/view_design"
+        style="@style/medium_text_style"
+        android:inputType="textCapWords"/>
+    <EditText
+        android:id="@+id/store_desc_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:gravity="top"
+        android:hint="@string/text_store_details"
+        android:background="@drawable/view_design"
+        android:inputType="textCapSentences"
         style="@style/medium_text_style"/>
 
-   <!-- <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="From"/>
-    <TimePicker
-        android:id="@+id/opening_time_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Closing"/>
-    <TimePicker
-        android:id="@+id/closing_time_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />-->
     <!-- TODO - Opening time and closing time input -->
 </LinearLayout>

@@ -30,16 +30,6 @@
                 android:layout_margin="8dp"
                 android:background="@drawable/view_design"
                 android:hint="@string/text_shop_name"/>
-
-            <EditText
-                android:id="@+id/description_text_view"
-                style="@style/medium_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/shop_name_text_view"
-                android:layout_margin="8dp"
-                android:background="@drawable/view_design"
-                android:hint="@string/text_description"/>
         </RelativeLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
