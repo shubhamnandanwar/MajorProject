@@ -1,15 +1,23 @@
 package com.clabs.majorproject.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clabs.majorproject.R;
+import com.clabs.majorproject.util.CommonUtilities;
+import com.clabs.majorproject.util.Constants;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -30,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final int SIGN_IN = 1002;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener authListener;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +46,41 @@ public class SplashActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
+        progressDialog = CommonUtilities.startProgressDialog(SplashActivity.this);
+
+        TextView titleTextView = (TextView) findViewById(R.id.text_view_title);
+        TextView subTitleTextView = (TextView) findViewById(R.id.text_view_sub_title);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/font.ttf");
+
+        titleTextView.setTypeface(typeface);
+        subTitleTextView.setTypeface(typeface);
+
+
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_keyboard_backspace_white_24dp);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Home");
+        }
+        actionBar.hide();
+        final SignInButton signInButton = (SignInButton) findViewById(R.id.btn_sign_in);
         mAuth = FirebaseAuth.getInstance();
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+                    signInButton.setVisibility(View.INVISIBLE);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }, 3000);
+
                 }
             }
         };
@@ -63,12 +98,12 @@ public class SplashActivity extends AppCompatActivity {
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-        SignInButton signInButton = (SignInButton) findViewById(R.id.btn_sign_in);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
 
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog.show();
                 googleSignIn();
             }
         });
@@ -88,10 +123,21 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        progressDialog.hide();
         if (requestCode == SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
+                String email = account.getEmail();
+                String userName = account.getDisplayName();
+                String temp = account.getPhotoUrl().toString();
+                SharedPreferences sharedPref = getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(Constants.USER_ID_KEY, email);
+                editor.putString(Constants.USER_NAME_KEY, userName);
+                editor.putString(Constants.IMAGE_URI_KEY, temp);
+                editor.apply();
+
                 firebaseAuthWithGoogle(account);
             } else {
 
@@ -109,6 +155,7 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
+                            progressDialog.hide();
                             Toast.makeText(SplashActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
                         }
                     }

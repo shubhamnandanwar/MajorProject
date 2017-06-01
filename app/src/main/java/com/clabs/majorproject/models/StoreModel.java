@@ -1,5 +1,6 @@
 package com.clabs.majorproject.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StoreModel {
@@ -15,6 +16,24 @@ public class StoreModel {
     private List<ReviewModel> reviewModelList;
     private List<FollowerModel> followerModelList;
     private String city;
+    private OfferModel offerModel;
+    private List<String> verifiedBy = new ArrayList<>();
+
+    public List<String> getVerifiedBy() {
+        return verifiedBy;
+    }
+
+    public void setVerifiedBy(List<String> verifiedBy) {
+        this.verifiedBy = verifiedBy;
+    }
+
+    public OfferModel getOfferModel() {
+        return offerModel;
+    }
+
+    public void setOfferModel(OfferModel offerModel) {
+        this.offerModel = offerModel;
+    }
 
     public String getId() {
         return id;

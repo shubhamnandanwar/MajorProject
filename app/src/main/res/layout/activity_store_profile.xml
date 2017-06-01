@@ -29,26 +29,26 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/rating_text_view"
-                    style="@style/large_text_style"
+                <RatingBar
+                    android:id="@+id/rating_average"
+                    style="?android:attr/ratingBarStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rating - 5*"
-                    android:textColor="@color/primary_dark"
-                    />
+                    android:layout_centerHorizontal="true"
+                    android:isIndicator="true"/>
 
                 <TextView
-                    android:id="@+id/followers_text_view"
-                    style="@style/large_text_style"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/textView_verify"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:text="0 Followers"
+                    android:layout_below="@+id/rating_average"
+                    android:gravity="center_horizontal"
+                    android:text="Verified by 2 Users"
                     android:textColor="@color/primary_dark"
+                    android:textSize="16sp"/>
 
-                    />
             </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/store_desc_text_view"
@@ -56,7 +56,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:text="A totally new concept to me so many variations to Maggi it is amazing. The best Maggi I have ever had was the OMG Maggi so cheesy delicious and fresh. The other Maggi was some fried one forgot the name it was fine crispy and flavourful."
                 />
 
 
@@ -81,42 +80,83 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:background="#DDDDDD"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:paddingBottom="16dp">
-
-                <TextView
-                    style="@style/medium_text_style"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/text_write_a_review"/>
-
-                <EditText
-                    android:id="@+id/review_edit_text"
-                    style="@style/medium_text_style"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Tell us what you think"/>
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/submit_button"
+                    android:id="@+id/button_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:background="@color/transparent"
-                    android:text="@string/text_submit"
-                    android:textAllCaps="true"
-                    android:textColor="@color/primary_dark"/>
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_design"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="Rate"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"/>
+
+                <Button
+                    android:id="@+id/button_verify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+
+                    android:layout_marginTop="32dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_design"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="Verify"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_view_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="16dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:text="Report Shop"
+                android:textColor="@color/secondary_text"
+                android:textSize="18sp"/>
+
+            <LinearLayout
+                android:id="@+id/rating_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Reviews"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="24sp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@color/primary_dark"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/review_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical"/>
 
         </LinearLayout>

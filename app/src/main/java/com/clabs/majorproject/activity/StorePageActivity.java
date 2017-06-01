@@ -1,11 +1,17 @@
 package com.clabs.majorproject.activity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +19,12 @@ import com.clabs.majorproject.R;
 import com.clabs.majorproject.models.StoreModel;
 import com.clabs.majorproject.singleton.ShopRegistrationSingleton;
 import com.squareup.picasso.Picasso;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class StorePageActivity extends AppCompatActivity {
 
@@ -46,4 +58,6 @@ public class StorePageActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

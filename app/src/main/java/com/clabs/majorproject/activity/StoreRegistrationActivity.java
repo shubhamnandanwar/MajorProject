@@ -2,6 +2,7 @@ package com.clabs.majorproject.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,8 +25,10 @@ import android.widget.ImageView;
 import com.clabs.majorproject.R;
 import com.clabs.majorproject.fragments.StoreDetailsFragment;
 import com.clabs.majorproject.fragments.StoreImagePickerFragment;
+import com.clabs.majorproject.models.OfferModel;
 import com.clabs.majorproject.models.StoreModel;
 import com.clabs.majorproject.models.LatLng;
+import com.clabs.majorproject.singleton.LocationSingleton;
 import com.clabs.majorproject.singleton.ShopRegistrationSingleton;
 import com.clabs.majorproject.util.CommonUtilities;
 import com.clabs.majorproject.util.Constants;
@@ -70,8 +73,6 @@ public class StoreRegistrationActivity extends AppCompatActivity {
         progressDialog = CommonUtilities.startProgressDialog(StoreRegistrationActivity.this, "Registering...");
 
     }
-
-
 
     private void setAdapter(){
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -124,13 +125,20 @@ public class StoreRegistrationActivity extends AppCompatActivity {
                             .child(id);
                     storeModel.setImageUri(downloadUri.toString());
                     LatLng latLng = new LatLng();
-                    latLng.setLatitude(25.75);
-                    latLng.setLongitude(75.75);
+                    latLng.setLatitude(LocationSingleton.getInstance().getLatLng().latitude);
+                    latLng.setLongitude(LocationSingleton.getInstance().getLatLng().longitude);
+                    storeModel.setOfferModel(new OfferModel());
                     storeModel.setLatLng(latLng);
                     storeModel.setId(id);
                     ShopRegistrationSingleton.getInstance().setShopModel(storeModel);
                     databaseReference.setValue(ShopRegistrationSingleton.getInstance().getShopModel());
                     progressDialog.dismiss();
+
+                    SharedPreferences sharedPref = getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(Constants.STORE_ID_KEY, id);
+                    editor.putString(Constants.STORE_TYPE_ID_KEY, storeModel.getStoreType());
+                    editor.apply();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

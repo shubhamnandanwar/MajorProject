@@ -2,9 +2,6 @@ package com.clabs.majorproject.singleton;
 
 import com.clabs.majorproject.models.StoreModel;
 
-/**
- * Created by shubh on 28-02-2017.
- */
 public class ShopRegistrationSingleton {
 
     private static ShopRegistrationSingleton shopRegistrationSingleton;

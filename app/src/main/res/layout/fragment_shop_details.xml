@@ -3,7 +3,12 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
-
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/view_design"/>
     <EditText
         android:id="@+id/store_address_edit_text"
         android:layout_width="match_parent"
@@ -26,6 +31,7 @@
         android:id="@+id/store_desc_edit_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:text=""
         android:layout_margin="8dp"
         android:gravity="top"
         android:hint="@string/text_store_details"

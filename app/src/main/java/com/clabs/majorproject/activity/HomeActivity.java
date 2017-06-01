@@ -1,18 +1,23 @@
 package com.clabs.majorproject.activity;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,8 +32,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.clabs.majorproject.GeofenceTransitionsIntentService;
+import com.clabs.majorproject.QrCodeActivity;
 import com.clabs.majorproject.R;
+import com.clabs.majorproject.ScanQrCode;
 import com.clabs.majorproject.models.StoreModel;
+import com.clabs.majorproject.singleton.LocationSingleton;
 import com.clabs.majorproject.singleton.ShopRegistrationSingleton;
 import com.clabs.majorproject.util.CommonUtilities;
 import com.clabs.majorproject.util.Constants;
@@ -52,6 +60,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -73,13 +82,24 @@ public class HomeActivity extends AppCompatActivity
     double currentLatitude = 8.5565795, currentLongitude = 76.8810227;
     private List<Geofence> mGeofenceList;
     PendingIntent mGeofencePendingIntent;
+    NavigationView navigationView;
     public static final String TAG = "Activity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_keyboard_backspace_white_24dp);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle("Home");
+        }
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -100,14 +120,52 @@ public class HomeActivity extends AppCompatActivity
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        isFirstTime();
+        if(Preference.getStoreId(HomeActivity.this).equals("#"))
+            hideWhenShopNotRegistered();
+        else
+            hideWhenShopRegistered();
+    }
+
+    private void hideWhenShopRegistered() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_register_shop).setVisible(false);
+    }
+
+
+    private void hideWhenShopNotRegistered() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_qr).setVisible(false);
+        nav_Menu.findItem(R.id.nav_scan_qr).setVisible(false);
+    }
+
+    private void isFirstTime() {
+
+        SharedPreferences sharedPref = getSharedPreferences(Constants.PREFERENCE, Context.MODE_PRIVATE);
+        boolean isFirstTime = sharedPref.getBoolean("isFirstTime", true);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("isFirstTime", false);
+        editor.apply();
+
+        if (isFirstTime) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
+            String userName = Preference.getUserName(HomeActivity.this).split(" ")[0];
+            alert.setTitle("Hello, " + userName)
+                    .setMessage("Welcome to Q Fish. \nHere you will find lots of small stores around you. Hope you will love to explore your city!!")
+                    .setNegativeButton("Lets Explore", null)
+                    .show();
+        }
     }
 
     private void setUpMap(StoreModel storeModel) {
         MarkerOptions markerOptions = new MarkerOptions();
         LatLng latLng = new LatLng(storeModel.getLatLng().getLatitude(), storeModel.getLatLng().getLongitude());
-
+        LocationSingleton.getInstance().setLatLng(latLng);
         TextView text = new TextView(getApplicationContext());
         text.setText(storeModel.getName());
         text.setPaddingRelative(8, 8, 8, 8);
@@ -127,20 +185,26 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    private void getRestaurantLocationFromDatabase() {
+    private void getLocationFromDatabase(String type) {
+        mMap.clear();
         final ProgressDialog progressDialog = CommonUtilities.startProgressDialog(HomeActivity.this);
         progressDialog.show();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                 .child(Preference.getCity(getApplicationContext()))
                 .child("Store")
-                .child(Constants.RESTAURANT);
+                .child(type);
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 try {
                     StoreModel model = dataSnapshot.getValue(StoreModel.class);
                     setUpMap(model);
+                    if (model.getOfferModel().getOfferId() != null) {
+                        Intent intent = new Intent(HomeActivity.this, CustomerQrCodeActivity.class);
+                        intent.putExtra("offer_desc", model.getOfferModel().getProductDesc());
+                        notificationAlert(intent, model.getOfferModel().getProductDesc(),model.getName());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -170,8 +234,28 @@ public class HomeActivity extends AppCompatActivity
         });
     }
 
-    private void showNoInternetConnectionDialog() {
+    private void notificationAlert(Intent intent, String title, String name) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
 
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.shop_icon)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        notificationBuilder.setContentTitle(name);
+        notificationBuilder.setContentText(title);
+
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notificationBuilder.build());
+    }
+
+    private void showNoInternetConnectionDialog() {
         AlertDialog.Builder alert = new AlertDialog.Builder(HomeActivity.this);
         alert.setTitle("No Internet Connection")
                 .setMessage("We can not detect any internet connectivity. Please check your internet connection and try again.")
@@ -265,12 +349,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -290,12 +368,35 @@ public class HomeActivity extends AppCompatActivity
             Intent intent = new Intent(HomeActivity.this, StoreRegistrationActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_restaurant) {
-            getRestaurantLocationFromDatabase();
+            getLocationFromDatabase(Constants.RESTAURANT);
+        } else if (id == R.id.nav_coffee) {
+            getLocationFromDatabase(Constants.COFFEE_SHOP);
+        } else if (id == R.id.nav_store) {
+            getLocationFromDatabase(Constants.STORE);
+        } else if (id == R.id.nav_qr) {
+            Intent intent = new Intent(HomeActivity.this, QrCodeActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_scan_qr) {
+            Intent intent = new Intent(HomeActivity.this, ScanQrCode.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_logout) {
+            signOut();
+        }
+        else if (id == R.id.nav_user_profile) {
+            Intent intent = new Intent(HomeActivity.this, UserProfileActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void signOut() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(HomeActivity.this, SplashActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private boolean isNetworkAvailable() {
@@ -342,6 +443,7 @@ public class HomeActivity extends AppCompatActivity
             Log.e(TAG, "Error");
         }
     }
+
     private PendingIntent getGeofencePendingIntent() {
         // Reuse the PendingIntent if we already have it.
         if (mGeofencePendingIntent != null) {
@@ -353,6 +455,7 @@ public class HomeActivity extends AppCompatActivity
         return PendingIntent.getService(this, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
     }
+
     @Override
     public void onConnectionSuspended(int i) {
         CommonUtilities.showSnackbar(drawerLayout, "Connection Suspended", getApplicationContext());
@@ -363,8 +466,8 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        LocationSingleton.getInstance().setLatLng(latLng);
         if (isFirstTime) {
             CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(17).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -375,6 +478,5 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         CommonUtilities.showSnackbar(drawerLayout, "Connection Failed", getApplicationContext());
-
     }
 }
